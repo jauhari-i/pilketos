@@ -29,7 +29,7 @@ mongoose.connect(
   }
 );
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.redirect('/api'));
 app.use('/api', require('../routes/api'));
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
