@@ -3,6 +3,8 @@ const validator = require('./validator/validate');
 const authController = require('../controllers/authController');
 const basicAuth = require('../middlewares/basicAuth');
 const uploadImg = require('../middlewares/uploadImg');
+const requireAuth = require('../configs/requireAuth');
+const isAdmin = require('../configs/isAdmin');
 
 router.get('/', (req, res) => {
   res.redirect('/api/v1');
@@ -20,8 +22,10 @@ router.post(
 );
 router.post(
   '/v1/register/kandidat',
-  [basicAuth, uploadImg, validator.registerKandidat],
+  [requireAuth, isAdmin, uploadImg, validator.registerKandidat],
   authController.registerKandidat
 );
+router.post('/v1/login/user', [basicAuth, validator.login], authController.loginUser);
+router.post('/v1/login/admin', [basicAuth, validator.login], authController.loginAdmin);
 
 module.exports = router;

@@ -2,11 +2,12 @@ const jwt = require('jsonwebtoken');
 
 module.exports = checkToken = async (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
+  console.log(token);
   !token &&
     res.status(403).json({
       msg: 'Login terlebih dahulu',
     });
-  await jwt.verify(token, 'pilketos', (err, decoded) => {
+  await jwt.verify(token.replace('Bearer ', ''), 'pilketos', (err, decoded) => {
     err &&
       res.status(401).json({
         status: 401,

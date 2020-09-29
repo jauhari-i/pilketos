@@ -1,6 +1,7 @@
 const { User, Kandidat, Admin } = require('../models/models');
 const crypt = require('bcryptjs');
 const { v4: uuid } = require('uuid');
+const jwt = require('jsonwebtoken');
 
 module.exports = authServices = {
   registerUser: async (data) => {
@@ -99,6 +100,77 @@ module.exports = authServices = {
           misi: kandidat.misi,
         },
         code: 201,
+      };
+    } catch (error) {
+      return error;
+    }
+  },
+  loginUser: async (data) => {
+    try {
+      const user = await User.findOne({ email: data.email });
+      if (!user) {
+        throw {
+          message: 'Email not found',
+          code: 404,
+        };
+      }
+      const comparePass = await crypt.compare(data.password, user.password);
+      if (!comparePass) {
+        throw {
+          message: 'Wrong password',
+          code: 400,
+        };
+      }
+      const token = jwt.sign(
+        {
+          sub: user.uuid,
+          role: 0,
+          voted: user.voted,
+        },
+        'pilketos',
+        { expiresIn: '24h' }
+      );
+      return {
+        message: 'Login user success',
+        data: {
+          accessToken: token,
+        },
+        code: 200,
+      };
+    } catch (error) {
+      return error;
+    }
+  },
+  loginAdmin: async (data) => {
+    try {
+      const admin = await Admin.findOne({ email: data.email });
+      if (!admin) {
+        throw {
+          message: 'Email not found',
+          code: 404,
+        };
+      }
+      const comparePass = await crypt.compare(data.password, admin.password);
+      if (!comparePass) {
+        throw {
+          message: 'Wrong password',
+          code: 400,
+        };
+      }
+      const token = jwt.sign(
+        {
+          sub: admin.uuid,
+          role: 1,
+        },
+        'pilketos',
+        { expiresIn: '24h' }
+      );
+      return {
+        message: 'Login admin success',
+        data: {
+          accessToken: token,
+        },
+        code: 200,
       };
     } catch (error) {
       return error;

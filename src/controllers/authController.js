@@ -60,6 +60,42 @@ module.exports = authControllers = {
       res.status(500).json('Internal server error');
     }
   },
-  loginUser: async (req, res) => {},
-  loginAdmin: async (req, res) => {},
+  loginUser: async (req, res) => {
+    const err = validationResult(req);
+    if (err.errors.length) {
+      let messages = err.errors.map((m) => ({
+        msg: m.msg,
+      }));
+      res.status(400).json(messages);
+    } else {
+      const { email, password } = req.body;
+      const query = await authService.loginUser({ email, password });
+      if (query) {
+        if (!query.code) {
+          return res.status(500).json('Internal server error');
+        }
+        return res.status(query.code).json(query);
+      }
+      res.status(500).json('Internal server error');
+    }
+  },
+  loginAdmin: async (req, res) => {
+    const err = validationResult(req);
+    if (err.errors.length) {
+      let messages = err.errors.map((m) => ({
+        msg: m.msg,
+      }));
+      res.status(400).json(messages);
+    } else {
+      const { email, password } = req.body;
+      const query = await authService.loginAdmin({ email, password });
+      if (query) {
+        if (!query.code) {
+          return res.status(500).json('Internal server error');
+        }
+        return res.status(query.code).json(query);
+      }
+      res.status(500).json('Internal server error');
+    }
+  },
 };

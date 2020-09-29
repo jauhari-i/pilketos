@@ -36,4 +36,8 @@ module.exports = validator = {
     check('visi').not().isEmpty().withMessage('Visi tidak boleh kosong'),
     check('misi').not().isEmpty().withMessage('Misi tidak boleh kosong'),
   ],
+  login: [
+    check('email').notEmpty().withMessage('Email tidak boleh kosong'),
+    check('password').not().isEmpty().withMessage('Kata sandi tidak boleh kosong'),
+  ],
 };
