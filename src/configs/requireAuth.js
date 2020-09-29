@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = checkToken = async (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization'];
-  console.log(token);
   !token &&
     res.status(403).json({
       msg: 'Login terlebih dahulu',
