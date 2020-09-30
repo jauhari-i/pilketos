@@ -2,6 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const validator = require('./validator/validate');
 const authController = require('../controllers/authController');
+const getController = require('../controllers/getController');
 const basicAuth = require('../middlewares/basicAuth');
 const uploadImg = require('../middlewares/uploadImg');
 const requireAuth = require('../configs/requireAuth');
@@ -28,5 +29,7 @@ router.post(
 );
 router.post('/v1/login/user', [basicAuth, validator.login], authController.loginUser);
 router.post('/v1/login/admin', [basicAuth, validator.login], authController.loginAdmin);
+router.get('/v1/users', [requireAuth, isAdmin], getController.getUser);
+router.get('/v1/kandidat', [basicAuth], getController.getKandidat);
 
 module.exports = router;

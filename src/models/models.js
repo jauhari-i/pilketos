@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   voted: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   editedAt: { type: Date },
-  lastLogin: { type: Date },
 });
 const kandidatSchema = new mongoose.Schema({
   uuid: { type: String },

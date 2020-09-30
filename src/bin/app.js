@@ -46,6 +46,7 @@ app.use(function (req, res, next) {
 io.use(async (socket, next) => {
   let userSocket = socket.id;
   console.log(userSocket);
+  next();
 });
 
 io.on('connection', (socket) => {
