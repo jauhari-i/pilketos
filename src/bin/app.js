@@ -1,12 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const socketio = require('socket.io');
 const port = process.env.PORT || 4000;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const log = require('morgan');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -42,14 +43,13 @@ app.use(function (req, res, next) {
   next();
 });
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
-const io = socketio(server);
+io.use(async (socket, next) => {
+  let userSocket = socket.id;
+  console.log(userSocket);
+});
 
 io.on('connection', (socket) => {
   console.log('Socket established with id: ' + socket.id);
-
-  socket.on('disconnect', function () {
-    console.log('Socket disconnected: ' + socket.id);
-  });
 });
+
+server.listen(port, () => console.log(`Example app listening on port ${port}!`));

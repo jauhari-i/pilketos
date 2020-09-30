@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const path = require('path');
 const validator = require('./validator/validate');
 const authController = require('../controllers/authController');
 const basicAuth = require('../middlewares/basicAuth');
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/v1', (req, res) => {
-  res.send('Api pilketos v1');
+  res.sendFile(path.join(__dirname, '../public/', 'index.html'));
 });
 
 router.post('/v1/register/user', [basicAuth, validator.registerUser], authController.registerUser);
